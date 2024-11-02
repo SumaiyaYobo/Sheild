@@ -8,6 +8,7 @@ from sqlalchemy.orm import sessionmaker, Session
 import pandas as pd
 import numpy as np
 from statsmodels.tsa.arima.model import ARIMA
+import uvicorn
 
 DATABASE_URL = "sqlite:///./water_levels.db"
 
@@ -116,3 +117,7 @@ def forecast_next_15_days(db: Session = Depends(get_db)):
     prediction = forecast_water_levels(historical_data, days_ahead=15)
     forecast = {f"day_{i+1}": level for i, level in enumerate(prediction)}
     return {"15_day_forecast": forecast}
+
+
+if __name__ == "__main__":
+    uvicorn.run("main:app", port=8000, reload=True)  # Run the FastAPI app with Uvicorn")
